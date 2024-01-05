@@ -3,7 +3,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="pasien.php?page=dashboard" class="nav-link <?php echo ($_GET['page'] == 'dashboard') ? 'active' : ''; ?>">
+            <a href="pasien.php?page=dashboard" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Dashboard
@@ -11,7 +11,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pasien.php?page=data-poli" class="nav-link <?php echo ($_GET['page'] == 'data-poli') ? 'active' : ''; ?>">
+            <a href="pasien.php?page=data-poli" class="nav-link">
               <i class="nav-icon fas fa-hospital"></i>
               <p>
                 Poli

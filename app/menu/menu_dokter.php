@@ -3,7 +3,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="dokter.php?page=dashboard" class="nav-link <?php echo ($_GET['page'] == 'dashboard') ? 'active' : ''; ?>">
+            <a href="dokter.php?page=dashboard" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Dashboard
@@ -11,7 +11,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="dokter.php?page=data-periksa-pasien" class="nav-link <?php echo ($_GET['page'] == 'data-periksa-pasien') ? 'active' : ''; ?>">
+            <a href="dokter.php?page=data-periksa-pasien" class="nav-link">
               <i class="nav-icon fas fa-stethoscope"></i>
               <p>
                 Memeriksa Pasien
@@ -19,7 +19,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="dokter.php?page=data-riwayat-pasien" class="nav-link <?php echo ($_GET['page'] == 'data-riwayat-pasien') ? 'active' : ''; ?>">
+            <a href="dokter.php?page=data-riwayat-pasien" class="nav-link">
               <i class="nav-icon fas fa-notes-medical"></i>
               <p>
                 Riwayat Pasien
