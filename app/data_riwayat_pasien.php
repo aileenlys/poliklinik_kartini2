@@ -3,6 +3,8 @@
 <?php
 include('../conf/config_poliklinik.php');
 
+// $id_dokter = $_SESSION['id'];
+$nama_dokter = $_SESSION['nama'];
 ?>
 
   <body class="hold-transition sidebar-mini">
@@ -17,7 +19,7 @@ include('../conf/config_poliklinik.php');
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="dokter.php">Home</a></li>
-                  <li class="breadcrumb-item active">Dokter</li>
+                  <li class="breadcrumb-item active">Riwayat Pasien</li>
                 </ol>
               </div>
             </div>
@@ -38,9 +40,9 @@ include('../conf/config_poliklinik.php');
                   <table class="table table-striped">
                     <thead>
                       <tr>
-                        <th style="width: 10px">No</th>
-                        <th style="width: 150px">Nama Pasien</th>
-                        <th style="width: 200px">Alamat</th>
+                        <th>No</th>
+                        <th>Nama Pasien</th>
+                        <th>Alamat</th>
                         <th>No. KTP</th>
                         <th>No. Hp</th>
                         <th>No. RM</th>
@@ -48,31 +50,99 @@ include('../conf/config_poliklinik.php');
                       </tr>
                     </thead>
                     <tbody>
-                      <?php
-                        $query = mysqli_query($koneksi, "SELECT * FROM pasien");
-                        if ($query) {
-                          while ($dok = mysqli_fetch_array($query)) {
+                    <?php
+                      $no = 1;
+                      $query = "SELECT daftar_poli.status_periksa, pasien.id, pasien.nama as nama_pasien, pasien.alamat, pasien.no_ktp, pasien.no_hp, pasien.no_rm 
+                                FROM daftar_poli 
+                                INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id 
+                                INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id 
+                                INNER JOIN dokter ON jadwal_periksa.id_dokter = dokter.id 
+                                WHERE dokter.nama = '$nama_dokter' AND status_periksa = '1' 
+                                GROUP BY pasien.id;";
+                      $result = mysqli_query($koneksi, $query);
+
+                      while ($data = mysqli_fetch_assoc($result)) {
+
                       ?>
-                            <tr>
-                              <td><?php echo $dok['id']; ?></td>
-                              <td><?php echo $dok['nama']; ?></td>
-                              <td><?php echo $dok['alamat']; ?></td>
-                              <td><?php echo $dok['no_ktp']; ?></td>
-                              <td><?php echo $dok['no_hp']; ?></td>
-                              <td><?php echo $dok['no_rm']; ?></td>
-                              <td>
-                                <button type="button" class="btn btn-info view-btn" data-id="<?php echo $dok['id']; ?>" data-toggle="modal" data-target="#modal-lg">
-                                  Detail Riwayat Periksa
-                                </button>
-                              </td>
-                            </tr>
-                      <?php
-                          }
-                        } else {
-                          // Handle query error
-                          echo "Error: " . mysqli_error($koneksi);
-                        }
-                      ?>
+                        <tr>
+                          <td><?php echo $no++ ?></td>
+                          <td><?php echo $data['nama_pasien']; ?></td>
+                          <td><?php echo $data['alamat']; ?></td>
+                          <td><?php echo $data['no_ktp']; ?></td>
+                          <td><?php echo $data['no_hp']; ?></td>
+                          <td><?php echo $data['no_rm']; ?></td>
+                          <td>
+                            <button type='button' class='btn btn-sm btn-primary edit-btn' data-toggle="modal" data-target="#detailModal<?php echo $data['id'] ?>">
+                              Detail Riwayat Periksa
+                            </button>
+
+                            <div class="modal fade" id="detailModal<?php echo $data['id'] ?>">
+                              <div class="modal-dialog modal-xl">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">Riwayat <?php echo $data['nama_pasien'] ?></h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap">
+                                          <thead>
+                                            <tr>
+                                              <td>No</td>
+                                              <td>Tanggal Periksa</td>
+                                              <td>Nama Pasien</td>
+                                              <td>Nama Dokter</td>
+                                              <td>Keluhan</td>
+                                              <td>Obat</td>
+                                              <td>Biaya</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <?php
+                                            $id_pasien = $data['id'];
+                                            $no = 1;
+                                            $ambilData = "SELECT detail_periksa.id as id_detailPeriksa, periksa.tgl_periksa, pasien.nama as nama_pasien, dokter.nama as nama_dokter, daftar_poli.keluhan, periksa.catatan, GROUP_CONCAT(obat.nama_obat) as nama_obat, SUM(obat.harga) + periksa.biaya_periksa as harga_obat 
+                                                          FROM detail_periksa 
+                                                          INNER JOIN periksa ON detail_periksa.id_periksa = periksa.id 
+                                                          INNER JOIN daftar_poli ON periksa.id_daftar_poli = daftar_poli.id 
+                                                          INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id 
+                                                          INNER JOIN obat ON detail_periksa.id_obat = obat.id 
+                                                          INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id 
+                                                          INNER JOIN dokter ON jadwal_periksa.id_dokter = dokter.id  
+                                                          WHERE dokter.nama = '$nama_dokter' AND pasien.id = '$id_pasien' 
+                                                          GROUP BY pasien.id, periksa.tgl_periksa";
+
+                                            $results = mysqli_query($koneksi, $ambilData);
+                                            while ($datas = mysqli_fetch_assoc($results)) {
+
+                                            ?>
+                                            <tr>
+                                              <td><?php echo $no++; ?></td>
+                                              <td><?php echo $datas['tgl_periksa'] ?></td>
+                                              <td><?php echo $datas['nama_pasien'] ?></td>
+                                              <td><?php echo $datas['nama_dokter'] ?></td>
+                                              <td style="white-space: pre-line;"><?php echo $datas['keluhan'] ?></td>
+                                              <td style="white-space: pre-line;"><?php echo $datas['nama_obat'] ?></td>
+                                              <td><?php echo $datas['harga_obat'] ?></td>
+                                            </tr>
+                                            <?php } ?>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-end">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                            </div>
+                          </td>
+                        </tr>
+                    <?php } ?>
                     </tbody>
                   </table>
                 </div>
@@ -85,67 +155,6 @@ include('../conf/config_poliklinik.php');
         </div>
       </section>
       <!-- /.content -->
-
-      <!-- Detail Riwayat Pasien -->
-      <div class="modal fade" id="modal-lg">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Riwayat Periksa</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form method='get' action=''>
-              <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">No</th>
-                      <th style="width: 150px">Nama Pasien</th>
-                      <th style="width: 200px">Alamat</th>
-                      <th>No. KTP</th>
-                      <th>No. Hp</th>
-                      <th>No. RM</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <?php
-                        $url = $_SERVER['REQUEST_URI'];
-                        $url = explode("=", $url);
-                        $id_pasien = $url[count($url)-1];
-
-                        $id_pasien = intval($id_pasien);
-
-                        $query = mysqli_query($koneksi, "SELECT * FROM pasien WHERE id = $id_pasien");
-
-                        if ($query) {
-                          while ($view = mysqli_fetch_array($query)) {
-                      ?>
-                            <td><?php echo $view['id']; ?></td>
-                            <td><?php echo $view['nama']; ?></td>
-                            <td><?php echo $view['alamat']; ?></td>
-                            <td><?php echo $view['no_ktp']; ?></td>
-                            <td><?php echo $view['no_hp']; ?></td>
-                            <td><?php echo $view['no_rm']; ?></td>
-                      <?php
-                          }
-                        } else {
-                          // Handle query error
-                          echo "Error: " . mysqli_error($koneksi);
-                        }
-                      ?>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.modal-content -->
-            </div>
-          </form>
-          <!-- /.modal-dialog -->
-        </div>
-      </div>
 
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark">

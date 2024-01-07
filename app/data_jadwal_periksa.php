@@ -51,18 +51,22 @@
                     </thead>
                     <tbody>
                       <?php
-                        $query = mysqli_query($koneksi,"SELECT jadwal_periksa.*, dokter.nama FROM jadwal_periksa LEFT JOIN dokter ON jadwal_periksa.id_dokter = dokter.id");
+                        $no = 1;
+                        $nama_dokter = $_SESSION['nama'];
+                        $query = mysqli_query($koneksi,"SELECT jadwal_periksa.*, dokter.nama FROM jadwal_periksa 
+                                                        LEFT JOIN dokter ON jadwal_periksa.id_dokter = dokter.id 
+                                                        WHERE dokter.nama = '$nama_dokter'");
                         while($dok = mysqli_fetch_array($query)){
                           
                       ?>
                       <tr>
-                        <td><?php echo $dok['id'];?></td>
+                        <td><?php echo $no++;?></td>
                         <td><?php echo $dok['nama'];?></td>
                         <td><?php echo $dok['hari'];?></td>
                         <td><?php echo $dok['jam_mulai'];?></td>
                         <td><?php echo $dok['jam_selesai']; ?></td>
                         <td>
-                        <?php 
+                            <?php 
                                 if ($dok['aktif'] == 'Y'){
                                     echo 'Aktif';
                                 }
@@ -75,7 +79,8 @@
                             ?>
                         </td>
                         <td>
-                          <a href="dokter.php?page=edit-data-jadwal-periksa&& id=<?php echo $dok['id']?>" class="btn btn-sm btn-success">Ubah</a>
+                          <a href="dokter.php?page=edit-jadwal-periksa&& id=<?php echo $dok['id']?>" class="btn btn-sm btn-success">Ubah</a>
+                          <a onClick="hapus_jadwal_periksa(<?php echo $dok['id']?>)" class="btn btn-sm btn-danger">Hapus</a>
                         </td>
                       </tr>
                       <?php } ?>
@@ -92,49 +97,65 @@
       </section>
       <!-- /.content -->
 
-      <!-- Tambah Data Dokter -->
+      <!-- Tambah Jadwal Periksa -->
       <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Tambah Data Dokter</h4>
+              <h4 class="modal-title">Tambah Jadwal Periksa</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetData()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form id="dataDokter" method="post" action="add/tambah_data_dokter.php">
+            <form id="dataJadwal" method="post" action="add/tambah_jadwal_periksa.php">
               <div class="modal-body">
                 <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputNamaDokter">Nama Dokter</label>
-                    <input type="text" class="form-control" id="exampleInputNamaDokter" placeholder="Nama Dokter" name="nama" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputAlamat">Alamat</label>
-                    <input type="text" class="form-control" id="exampleInputAlamat" placeholder="Alamat" name="alamat" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputNoHp">Nomor Hp</label>
-                    <input type="text" class="form-control" id="exampleInputNoHp" placeholder="Nomor Hp" name="no_hp" required>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <!-- select -->
+                      <div class="form-group">
+                        <input type="hidden" name="hidden_nama" value="<?php echo $nama_dokter; ?>" hidden>
+                      </div>
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-sm-12">
                       <!-- select -->
                       <div class="form-group">
-                        <label>Poli</label>
-                        <select class="form-control" name="nama_poli">
-                          <option selected>Pilih</option>
-                          <?php
-                            $query = mysqli_query($koneksi,"SELECT id, nama_poli FROM poli");
-                            while($dok = mysqli_fetch_array($query)){
-                              echo '<option value="'.$dok['id'].'">'.htmlentities($dok['nama_poli']).'</option>';
-                            }
-                          ?>
+                        <label>Hari</label>
+                        <select class="form-control" name="hari" required>
+                            <option value="" selected disabled>Pilih Hari</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
                         </select>
                       </div>
                     </div>
                   </div>
-                  <!-- /.card-body -->
+                  <div class="form-group">
+                    <label for="exampleInputJamMulai">Jam Mulai</label>
+                    <input type="time" class="form-control" id="exampleInputJamMulai" placeholder="Jam Mulai" name="jam_mulai" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputJamSelesai">Jam Selesai</label>
+                    <input type="time" class="form-control" id="exampleInputJamSelesai" placeholder="Jam Selesai" name="jam_selesai" required>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <!-- select -->
+                      <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status" required>
+                            <option value="" selected disabled>Pilih</option>
+                            <option value="Y">Aktif</option>
+                            <option value="N">Tidak Aktif</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="submit" class="btn btn-default" data-dismiss="modal" onclick="resetData()">Batal</button>
@@ -158,10 +179,10 @@
     <script>
       // Reset the form after submission
       function resetData() {
-        document.getElementById("dataDokter").reset();
+        document.getElementById("dataJadwal").reset();
       }
 
-      function hapus_data_dokter(data_id){
+      function hapus_jadwal_periksa(data_id){
         Swal.fire({
           title: "Apakah yakin data ingin dihapus ?",
           showCancelButton: true,
@@ -169,7 +190,7 @@
         }).then((result) => {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
-            window.location=("delete/hapus_data_dokter.php?id="+data_id)
+            window.location=("delete/hapus_jadwal_periksa.php?id="+data_id)
           }
         });
       }
