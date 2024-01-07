@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2024 at 09:06 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 7.3.30
+-- Generation Time: Jan 06, 2024 at 03:44 AM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,14 +41,9 @@ CREATE TABLE `daftar_poli` (
 --
 
 INSERT INTO `daftar_poli` (`id`, `id_pasien`, `id_jadwal`, `keluhan`, `no_antrian`, `status_periksa`) VALUES
-(1, 1, 3, 'sakit kepala', 1, '1'),
-(2, 2, 1, 'diare', 2, '0'),
-(4, 14, 1, 'tidak nafsu makan', 3, '0'),
-(5, 14, 3, 'Cek mata minus', 2, '0'),
-(6, 14, 1, 'Batuk dan pilek', 4, '0'),
-(7, 14, 3, 'Infeksi mata kanan', 3, '0'),
-(8, 14, 3, 'Katarak', 4, '0'),
-(9, 14, 1, 'Diare', 5, '0');
+(1, 1, 3, 'Muntaber', 1, '1'),
+(2, 2, 1, 'Ngilu gigi', 2, '0'),
+(11, 20, 4, 'Cemas', 1, '0');
 
 -- --------------------------------------------------------
 
@@ -89,10 +84,11 @@ CREATE TABLE `dokter` (
 --
 
 INSERT INTO `dokter` (`id`, `nama`, `password`, `alamat`, `no_hp`, `id_poli`) VALUES
-(21, 'Rina', '', 'Lampung', '08777777', 1),
-(22, 'sarwahita', '', 'jakarta', '0812345', 3),
-(24, 'Fizi', '', 'Jakarta', '0872365642', 1),
-(25, 'Koko', '$2y$10$8yxKSloZZ/CKZBOWPvUvd.sL185CB2UU6KjT8r0UtUx2767BDlFwu', 'Koko', 'Koko', 2);
+(21, 'Venny', 'venny123', 'Jakarta Timur', '082837619275', 2),
+(22, 'Bella', 'bella456', 'Surabaya', '0818936254176', 3),
+(24, 'Himeno', 'himeno123', 'Jakarta', '081276398625', 1),
+(25, 'Nurikan', '$2y$10$8yxKSloZZ/CKZBOWPvUvd.sL185CB2UU6KjT8r0UtUx2767BDlFwu', 'Semarang', '0892547162537', 2),
+(26, 'Levi', '$2y$10$UZ2htkY4tPV6UwE7vk5QuOYpVjkPpIWp3dvVyThZhGGvo6/jUUUdu', 'Wall Maria No.12', '089654234876', 4);
 
 -- --------------------------------------------------------
 
@@ -115,7 +111,8 @@ CREATE TABLE `jadwal_periksa` (
 INSERT INTO `jadwal_periksa` (`id`, `id_dokter`, `hari`, `jam_mulai`, `jam_selesai`) VALUES
 (1, 21, 'Selasa', '07:00:00', '12:00:00'),
 (2, 24, 'Jumat', '08:00:00', '15:30:00'),
-(3, 22, 'Rabu', '13:00:00', '20:00:00');
+(3, 22, 'Rabu', '13:00:00', '20:00:00'),
+(4, 26, 'Sabtu', '09:00:00', '15:00:00');
 
 -- --------------------------------------------------------
 
@@ -135,8 +132,8 @@ CREATE TABLE `obat` (
 --
 
 INSERT INTO `obat` (`id`, `nama_obat`, `kemasan`, `harga`) VALUES
-(3, 'Vitamin C', '50ml', 15000),
-(4, 'Panadol', '500ml', 25000);
+(3, 'Vitamin C', '100ml', 75000),
+(4, 'Paramex', '12 tablet', 50000);
 
 -- --------------------------------------------------------
 
@@ -159,18 +156,25 @@ CREATE TABLE `pasien` (
 --
 
 INSERT INTO `pasien` (`id`, `nama`, `password`, `alamat`, `no_ktp`, `no_hp`, `no_rm`) VALUES
-(1, 'Adi', 'adi123', 'Jakarta', '332629837', '08537826', '202312-001'),
-(2, 'Nana', 'nana22', 'Solo', '33286785', '08265286', '202312-002'),
-(3, 'Joko', '$2y$10$UoBDHg0yaLBzYiPRApkTu.dbxynYGnw/Sk7ocvY1StXbTHuON3tEW', 'Bondowoso', '332948593', '08527321', '202312-003'),
-(5, 'Rani', '$2y$10$0VfyKU8QCmFJxuoOmkIULuq.VpbC6n5jUc84uQoCRHE5gjob9ws7a', 'Mejasem', '33289448998', '08222222', '202312-005'),
-(6, 'Koki', '$2y$10$d7Yiel5sW5E9t9piNHPzAOrFBMNrVJfPdGoRzTB3dM1yJJ4IvR35K', 'Malang', '3329893598', '0858238798', '202312-006'),
-(7, 'Dadang', '$2y$10$LvxhokCuDFbNLDzGDvGU6.acIw16pRWcUtrvU5UoK8SqHWWt2FH8G', 'Wonokerto', '332947934', '085882374', '202312-007'),
-(8, 'Dini', '$2y$10$lk7spc5e0rR3DeTPPF2W5uxd726AoOOJnily0q03wKx5LCIvG/wV6', 'Jakarta', '332903', '08573282', '202312-008'),
+(1, 'Cici', 'cici123', 'Jambi', '1000345789', '089765345672', '202312-001'),
+(2, 'Fafa', 'fafa123', 'Cikini', '1000765246', '0875247256876', '202312-002'),
+(3, 'Trace', '$2y$10$UoBDHg0yaLBzYiPRApkTu.dbxynYGnw/Sk7ocvY1StXbTHuON3tEW', 'Bringin', '1000972567', '0856536258253', '202312-003'),
+(5, 'Aqila', '$2y$10$0VfyKU8QCmFJxuoOmkIULuq.VpbC6n5jUc84uQoCRHE5gjob9ws7a', 'Bali', '1000245367', '081324763901', '202312-005'),
+(6, 'Cio', '$2y$10$d7Yiel5sW5E9t9piNHPzAOrFBMNrVJfPdGoRzTB3dM1yJJ4IvR35K', 'Jepara', '1000635724', '087624317597', '202312-006'),
+(7, 'Riyan', '$2y$10$LvxhokCuDFbNLDzGDvGU6.acIw16pRWcUtrvU5UoK8SqHWWt2FH8G', 'Ciwidey', '1000256341', '082536790123', '202312-007'),
+(8, 'Dina', '$2y$10$lk7spc5e0rR3DeTPPF2W5uxd726AoOOJnily0q03wKx5LCIvG/wV6', 'Surakarta', '1000672456', '085895124276', '202312-008'),
 (9, 'Caca', '$2y$10$fHW8BEA0VV9DUi33qO5OE.i0nwlYIEhZioB/b/yM.dR7LlcZpWqO2', 'Semarang', '3328495', '0834623487', '202312-009'),
 (10, 'Jaka', '$2y$10$oImZPRY9DdiQH4SJETMcU.lAcLV.fDOdl7C1nMXLfZKzUB.x7OOWO', 'Bekasi', '332487593', '0857382623', '202401-010'),
-(12, 'Jojo', '$2y$10$yli76q0IZ.tn4tsQuCDoLO3kc5l95ML9ToivbsVtE0mLnwFbGl8/S', 'Brebes', '3332874', '08237', '202401-012'),
-(13, 'Nini', '$2y$10$Ue3H05D8SyzbFCSbYqfpae1EVTRolymc350t3bzOtjEnk9RtqhdBq', 'Tegal', '332984', '083247239', '202401-013'),
-(14, 'Rara', '$2y$10$J5xeC72.6kF8GMy87wx6X.o8E62NcZwP4vhOTarn8oVAT92Ee.V6G', 'Surakarta', '33298492', '023849283', '202401-014');
+(12, 'Aca', '$2y$10$yli76q0IZ.tn4tsQuCDoLO3kc5l95ML9ToivbsVtE0mLnwFbGl8/S', 'Surabaya', '1000543267', '089764376897', '202401-012'),
+(13, 'Dinda', '$2y$10$Ue3H05D8SyzbFCSbYqfpae1EVTRolymc350t3bzOtjEnk9RtqhdBq', 'Tegal', '1000432567', '081453276589', '202401-013'),
+(14, 'Cika', '$2y$10$J5xeC72.6kF8GMy87wx6X.o8E62NcZwP4vhOTarn8oVAT92Ee.V6G', 'Brebes', '1000256371', '089152773572', '202401-014'),
+(15, 'Nabila', '$2y$10$UgH3uJm9uXHK9lcf.JC8gOP6Fc2MbyM1ySXIvcVOeUk5Fn66LeXKa', 'Bogor', '1000743574', '08162548175682', '202401-015'),
+(16, 'Jingga', '$2y$10$lk7spc5e0rR3DeTPPF2W5uxd726AoOOJnily0q03wKx5LCIvG/wV6', 'Bandung', '1000562478', '085524890175', '202312-008'),
+(17, 'Briyan', '$2y$10$lk7spc5e0rR3DeTPPF2W5uxd726AoOOJnily0q03wKx5LCIvG/wV6', 'Jakarta', '1000245814', '087526891568', '202312-008'),
+(18, 'Didi', '$2y$10$oImZPRY9DdiQH4SJETMcU.lAcLV.fDOdl7C1nMXLfZKzUB.x7OOWO', 'Pekalongan', '1000982654', '0863782667185', '202401-010'),
+(19, 'Fira', '$2y$10$yli76q0IZ.tn4tsQuCDoLO3kc5l95ML9ToivbsVtE0mLnwFbGl8/S', 'Kudus', '1000267765', '0894567289109', '202401-012'),
+(20, 'Cila', '$2y$10$nQX9u0miHlQpc6yl5vUZgeeUwBhvsA0Qnwns4wiQ5ZAlkZNviFknC', 'Pedurungan', '1000537653', '085234123567', '202401-016'),
+(21, 'Dinda', '$2y$10$bbaCa/CTizfHmSO0f7gQ5eo3Ok6I20fBQ9AJwY1QhibEcvwPO5EXK', 'Cileduk', '1000245614326', '089453672456', '202401-017');
 
 -- --------------------------------------------------------
 
@@ -191,8 +195,8 @@ CREATE TABLE `periksa` (
 --
 
 INSERT INTO `periksa` (`id`, `id_daftar_poli`, `tgl_periksa`, `catatan`, `biaya_periksa`) VALUES
-(1, 2, '2023-12-13 09:00:00', 'jangan makan pedas terlalu banyak dan jajanan diluar rumah', 200000),
-(2, 1, '2023-09-05 14:00:00', 'jangan terlalu stres', 150000);
+(1, 2, '2023-12-13 09:00:00', 'Tidak memakan makanan yang dingin dan panas, lebih baik makan ketika sudah hangat atau suhu ruangan.', 250000),
+(2, 1, '2023-09-05 14:00:00', 'Memakan yang sehat, tidak memakan diluar, dan sementara memakan yang berserat dan meminum vitamin.', 300000);
 
 -- --------------------------------------------------------
 
@@ -211,9 +215,10 @@ CREATE TABLE `poli` (
 --
 
 INSERT INTO `poli` (`id`, `nama_poli`, `keterangan`) VALUES
-(1, 'Anak', 'Panas'),
-(2, 'Gigi', 'Berlubang'),
-(3, 'Mata', 'Minus');
+(1, 'Anak', 'Untuk dokter anak anak'),
+(2, 'Gigi', 'Untuk sakit gigi'),
+(3, 'Mata', 'Untuk rujukan ke dokter mata'),
+(4, 'Jiwa', 'Poli jiwa anak');
 
 --
 -- Indexes for dumped tables
@@ -282,7 +287,7 @@ ALTER TABLE `poli`
 -- AUTO_INCREMENT for table `daftar_poli`
 --
 ALTER TABLE `daftar_poli`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `detail_periksa`
@@ -294,7 +299,7 @@ ALTER TABLE `detail_periksa`
 -- AUTO_INCREMENT for table `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `jadwal_periksa`
@@ -312,7 +317,7 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `periksa`
@@ -324,7 +329,7 @@ ALTER TABLE `periksa`
 -- AUTO_INCREMENT for table `poli`
 --
 ALTER TABLE `poli`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

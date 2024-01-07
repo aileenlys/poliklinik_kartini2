@@ -26,5 +26,13 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="dokter.php?page=data-jadwal-periksa" class="nav-link">
+              <i class="nav-icon fas fa-notes-medical"></i>
+              <p>
+                Jadwal Periksa
+              </p>
+            </a>
+          </li>
         </ul>
     </nav>
