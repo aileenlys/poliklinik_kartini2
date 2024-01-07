@@ -40,7 +40,7 @@
           <input type="text" class="form-control" placeholder="Input Nama" name="nama">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
           <input type="text" class="form-control" placeholder="Input Alamat" name="alamat">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-map-marker"></span>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
           <input type="text" class="form-control" placeholder="Input Nomor HP" name="no_hp">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-phone"></span>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
             </select>
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
+                    <span class="fas fa-id-badge"></span>
                 </div>
             </div>
         </div>
