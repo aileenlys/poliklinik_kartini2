@@ -58,6 +58,9 @@
         else if($_GET['page']=='data-jadwal-periksa'){
           include('data_jadwal_periksa.php');
         }
+        else if($_GET['page']=='edit-jadwal-periksa'){
+          include('edit/edit_jadwal_periksa.php');
+        }
         else{
           include('not_found.php');
         }
